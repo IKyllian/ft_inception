@@ -1,17 +1,13 @@
 FROM debian:buster
 
-WORKDIR /
-
 RUN apt-get update \
 	&& apt-get install -y nginx \
 	&& mkdir /etc/nginx/ssl \
-	openssl req -nodes -sha256 -newkey rsa:2048 \
-	-subj "" \
+	&& openssl req -nodes -sha256 rsa:2048 -days365 -new -newkey  \
 	-keyout /etc/nginx/ssl/private.key \
-	-out /etc/nginx/ssl/certificate.csr
+	-subj "/C=FR/ST=Rhone/L=Lyon/O=42/CN=kdelport.42.fr/emailAddress=kdelport@student.42lyon.fr" \
+	-out /etc/nginx/ssl/certificate.crt
 
-
-
-EXPOSE 80 443
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
