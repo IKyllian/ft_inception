@@ -8,3 +8,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - 443:443
+    mariadb:
+      restart: always
+      image: mariadb
+      container_name: mariadb
+      build:
+        context: requirements/nginx/.
+        dockerfile: Dockerfile
+        

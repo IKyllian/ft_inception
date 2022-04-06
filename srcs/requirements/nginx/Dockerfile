@@ -3,7 +3,7 @@ FROM debian:buster
 RUN apt-get update \
 	&& apt-get install -y nginx openssl
 
-COPY ./nginx/nginx.conf /etc/nginx
+COPY ./nginx/nginx.conf /etc/nginx/sites-available/default
 
 RUN mkdir /etc/nginx/ssl \
 	&& openssl req -nodes -sha256 rsa:2048 -days365 -new -newkey  \
