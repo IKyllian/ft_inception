@@ -3,13 +3,14 @@ FROM debian:buster
 RUN apt-get update \
 	&& apt-get install -y nginx openssl
 
-COPY ./nginx/nginx.conf /etc/nginx/sites-available/default
+COPY ./nginx.conf /etc/nginx/sites-available/default
 
-RUN mkdir /etc/nginx/ssl \
-	&& openssl req -nodes -sha256 rsa:2048 -days365 -new -newkey  \
+RUN mkdir /etc/nginx/ssl 
+
+RUN openssl req -new -newkey rsa:2048 -days 365 -nodes -sha256 -x509 \
 	-keyout /etc/nginx/ssl/private.key \
-	-subj "/C=FR/ST=Rhone/L=Lyon/O=42/CN=kdelport.42.fr/emailAddress=kdelport@student.42lyon.fr" \
-	-out /etc/nginx/ssl/certificate.crt
+	-out /etc/nginx/ssl/certificate.crt \
+	-subj "/C=FR/ST=Rhone/L=Lyon/O=42/CN=kdelport.42.fr/emailAddress=kdelport@student.42lyon.fr"
 
 EXPOSE 443
 

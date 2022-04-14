@@ -8,9 +8,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - 443:443
-    network: my_network
+    # network: my_network
   mariadb:
-    depends_on: nginx
+    depends_on:
+      - nginx
     restart: always
     image: mariadb
     container_name: mariadb
@@ -21,7 +22,7 @@ services:
         - DB_NAME=${DB_NAME}
         - DB_USER=${DB_USER}
         - DB_PASS=${DB_PASS}
-    network: my_network
+    # network: my_network
   wordpress:
     depends_on:
       - mariadb
@@ -31,13 +32,18 @@ services:
     build:
       context: requirements/wordpress/
       dockerfile: Dockerfile
-    network: my_network
-volume:
-  db:
-    driver: local
-  wordpress:
-    driver: local
-network:
-    my_network:
-      name: my_network
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${WP_ADMIN}
+      WORDPRESS_DB_PASSWORD: ${WP_ADMIN_PASS}
+      WORDPRESS_DB_NAME: ${WP_ADMIN_MAIL}
+    # network: my_network
+# volume:
+#   db:
+#     driver: local
+#   wordpress:
+#     driver: local
+# network:
+#     my_network:
+#       name: my_network
         
