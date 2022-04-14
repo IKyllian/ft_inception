@@ -4,21 +4,24 @@ services:
     image: nginx
     container_name: nginx
     build:
-      context: requirements/nginx/.
+      context: requirements/nginx/
       dockerfile: Dockerfile
     ports:
       - 443:443
+    network: my_network
   mariadb:
+    depends_on: nginx
     restart: always
     image: mariadb
     container_name: mariadb
     build:
-      context: requirements/mariadb/.
+      context: requirements/mariadb/
       dockerfile: Dockerfile
       args:
         - DB_NAME=${DB_NAME}
         - DB_USER=${DB_USER}
         - DB_PASS=${DB_PASS}
+    network: my_network
   wordpress:
     depends_on:
       - mariadb
@@ -26,9 +29,15 @@ services:
     image: wordpress
     container_name: wordpress
     build:
-      context: requirements/wordpress/.
+      context: requirements/wordpress/
       dockerfile: Dockerfile
-  network:
+    network: my_network
+volume:
+  db:
+    driver: local
+  wordpress:
+    driver: local
+network:
     my_network:
       name: my_network
         
