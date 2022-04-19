@@ -3,6 +3,7 @@ services:
     depends_on:
       - wordpress
     restart: always
+    init: true
     image: nginx
     container_name: nginx
     build:
@@ -11,11 +12,14 @@ services:
     ports:
       - 443:443
     networks:
-      - my_network
+      - inceptionNet
+    volumes:
+      - wordpress:/var/www/html/
   mariadb:
     restart: always
     image: mariadb
     container_name: mariadb
+    init: true
     build:
       context: requirements/mariadb/
       dockerfile: Dockerfile
@@ -24,15 +28,16 @@ services:
         - DB_USER=${DB_USER}
         - DB_PASS=${DB_PASS}
     volumes:
-      - db:/var/lib/mysql
+      - db:/var/lib/mysql/
     networks: 
-      - my_network
+      - inceptionNet
   wordpress:
     depends_on:
       - mariadb
     restart: always
     image: wordpress
     container_name: wordpress
+    init: true
     build:
       context: requirements/wordpress/
       dockerfile: Dockerfile
@@ -46,7 +51,7 @@ services:
     volumes:
       - wordpress:/var/www/html/
     networks:
-      - my_network
+      - inceptionNet
 volumes:
   db:
     name: db
@@ -63,8 +68,8 @@ volumes:
     #   o: bind
     #   type: none 
 networks:
-    my_network:
-      name: my_network
+    inceptionNet:
+      name: inceptionNet
       driver: bridge
 
         

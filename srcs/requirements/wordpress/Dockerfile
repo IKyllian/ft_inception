@@ -3,7 +3,8 @@ FROM debian:buster
 COPY /config /config
 
 RUN apt-get update \
-	&& apt-get install -y wget php php-common php-fpm php-mysql php-json php-mbstring php-cgi php-zip php-gd php-xml php-pear php-gettext
+	&& apt-get install -y wget php /
+	php-fpm php-mysql php-mbstring php-zip php-gd php-xml php-pear php-gettext php-cgi
 
 RUN service php7.3-fpm start \
 	&& mkdir -p /var/www/html \
