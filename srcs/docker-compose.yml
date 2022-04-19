@@ -1,5 +1,7 @@
 services:
   nginx:
+    depends_on:
+      - wordpress
     restart: always
     image: nginx
     container_name: nginx
@@ -8,10 +10,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - 443:443
-    # network: my_network
+    networks:
+      - my_network
   mariadb:
-    depends_on:
-      - nginx
     restart: always
     image: mariadb
     container_name: mariadb
@@ -22,7 +23,10 @@ services:
         - DB_NAME=${DB_NAME}
         - DB_USER=${DB_USER}
         - DB_PASS=${DB_PASS}
-    # network: my_network
+    volumes:
+      - db:/var/lib/mysql
+    networks: 
+      - my_network
   wordpress:
     depends_on:
       - mariadb
@@ -33,15 +37,34 @@ services:
       context: requirements/wordpress/
       dockerfile: Dockerfile
     environment:
-      WORDPRESS_DB_USER: ${WP_ADMIN}
-      WORDPRESS_DB_PASSWORD: ${WP_ADMIN_PASS}
-    # network: my_network
-# volume:
-#   db:
-#     driver: local
-#   wordpress:
-#     driver: local
-# network:
-#     my_network:
-#       name: my_network
+      WP_ADMIN: ${WP_ADMIN}
+      WP_ADMIN_PASS: ${WP_ADMIN_PASS}
+      WP_ADMIN_MAIL: ${WP_ADMIN_MAIL}
+      WP_USER: ${WP_USER}
+      WP_USER_PASS: ${WP_USER_PASS}
+      WP_USER_MAIL: ${WP_USER_MAIL}
+    volumes:
+      - wordpress:/var/www/html/
+    networks:
+      - my_network
+volumes:
+  db:
+    name: db
+    driver: local
+    # driver_opts:
+    #   device: /Users/kdelport/db
+    #   o: bind
+    #   type: none
+  wordpress:
+    name: wordpress
+    driver: local
+    # driver_opts:
+    #   device: /Users/kdelport/wp
+    #   o: bind
+    #   type: none 
+networks:
+    my_network:
+      name: my_network
+      driver: bridge
+
         

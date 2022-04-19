@@ -15,8 +15,6 @@ RUN service php7.3-fpm start \
 	&& chmod +x /tmp/wp-cli.phar \
 	&& mv /tmp/wp-cli.phar /usr/local/bin/wp
 
-RUN ""
-
 EXPOSE 9000
 
 CMD ["sleep", "infinity"]
