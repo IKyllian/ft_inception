@@ -1,3 +1,4 @@
+version: "3.7"
 services:
   nginx:
     depends_on:
@@ -65,20 +66,18 @@ volumes:
   db:
     name: db
     driver: local
-    # driver_opts:
-    #   device: /Users/kdelport/db
-    #   o: bind
-    #   type: none
+    driver_opts:
+      device: /home/kdelport/data/db
+      o: bind
+      type: none
   wordpress:
     name: wordpress
     driver: local
-    # driver_opts:
-    #   device: /Users/kdelport/wp
-    #   o: bind
-    #   type: none 
+    driver_opts:
+      device: /home/kdelport/data/wp
+      o: bind
+      type: none 
 networks:
     inceptionNet:
       name: inceptionNet
       driver: bridge
-
-        
