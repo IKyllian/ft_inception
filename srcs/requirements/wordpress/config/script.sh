@@ -4,4 +4,3 @@ wp --allow-root --path='/var/www/html/wordpress/' core install --url=$WP_URL --t
 wp --allow-root --path='/var/www/html/wordpress/' user create $WP_USER $WP_USER_MAIL --user_pass=$WP_USER_PASS
 
 php-fpm7.3 -R -F
-#sleep infinity
